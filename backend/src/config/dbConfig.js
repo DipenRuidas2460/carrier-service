@@ -14,7 +14,7 @@ const sequelize = new Sequelize("carrier", "root", process.env.ROOT_PASSWORD, {
 const connectToDatabase = async () => {
   try {
     await sequelize.authenticate();
-    console.log("Mysql Database Connection has been established successfully!");
+    console.log("Mysql Database Connected!");
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }
