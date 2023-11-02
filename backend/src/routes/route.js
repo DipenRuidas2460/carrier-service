@@ -20,6 +20,8 @@ const {
 
 const { accessChat, fetchChats } = require("../controllers/chatController");
 
+const { createTruckInfo, fetchTruckInfoById, fetchAllTruckInfo, updateTruckInfo, deleteTruckInfo } = require("../controllers/truckInfoController");
+
 const { validateTokenMiddleware } = require("../middleware/auth");
 
 // -------------------- Customer Profile Route ----------------------------------------------------------------------------------
@@ -47,5 +49,13 @@ router.get("/chat", validateTokenMiddleware, fetchChats);
 
 router.post("/message", validateTokenMiddleware, sendMessage);
 router.get("/message/:chatId", validateTokenMiddleware, allMessages);
+
+// ---------------------- Truck Routes ----------------------------------------------------------------------------------------
+
+router.post("/create-transport", validateTokenMiddleware, createTruckInfo);
+router.get("/transport-by-carrierId", validateTokenMiddleware, fetchTruckInfoById);
+router.get("/transport", validateTokenMiddleware, fetchAllTruckInfo);
+router.put("/transport/:truckId", validateTokenMiddleware, updateTruckInfo);
+router.delete("/transport/:truckId", validateTokenMiddleware, deleteTruckInfo);
 
 module.exports = router;

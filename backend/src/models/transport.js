@@ -1,10 +1,10 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/dbConfig");
 const Customer = require("./customer");
-const Transport = require("./transport");
+const Payment = require("./payment");
 
-const Payment = sequelize.define(
-  "Payment",
+const Transport = sequelize.define(
+  "Transport ",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -16,39 +16,39 @@ const Payment = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    transportId: {
+    driverId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    transactionId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    amount: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      trim: true,
-    },
-    currency: {
+    startLocation: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    paymentStatus: {
-      type: DataTypes.ENUM("success", "pending", "failed"),
+    endLocation: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    fare: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },
   {
-    tableName: "Payment",
+    tableName: "Transport ",
     updatedAt: false,
   }
 );
 
 (async () => {
-  await Payment.sync({ force: false });
+  await Truck.sync({ force: false });
 })();
 
-Payment.belongsTo(Customer, { foreignKey: "customerId", as: "pay" });
-Payment.belongsTo(Transport, { foreignKey: "transportId", as: "paymentTrans" });
+Transport.hasOne(Payment);
+Transport.belongsTo(Customer, { foreignKey: "customerId", as: "transCustomer" });
+Transport.belongsTo(Customer, { foreignKey: "driverId", as: "transDriver" });
 
-module.exports = Payment;
+module.exports = Transport;
