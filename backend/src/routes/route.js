@@ -20,9 +20,25 @@ const {
 
 const { accessChat, fetchChats } = require("../controllers/chatController");
 
-const { createTruckInfo, fetchTruckInfoById, fetchAllTruckInfo, updateTruckInfo, deleteTruckInfo } = require("../controllers/truckInfoController");
+const {
+  createPaymentData,
+  fetchPaymentData,
+} = require("../controllers/paymentController");
+
+const {
+  createTruckInfo,
+  fetchTruckInfo,
+  updateTruckInfo,
+  deleteTruckInfo,
+} = require("../controllers/truckInfoController");
 
 const { validateTokenMiddleware } = require("../middleware/auth");
+const { createTransportData, fetchTransportData } = require("../controllers/transportController");
+const { createLocationData, fetchLocationData } = require("../controllers/locationController");
+const { createCommisionData, fetchCommisionData } = require("../controllers/commisionController");
+const { createWalletData, fetchWalletData } = require("../controllers/walletController");
+const { createReviewData, fetchReviewData } = require("../controllers/reviewController");
+const { createPayoutData, fetchPayoutData } = require("../controllers/payoutController");
 
 // -------------------- Customer Profile Route ----------------------------------------------------------------------------------
 
@@ -50,12 +66,46 @@ router.get("/chat", validateTokenMiddleware, fetchChats);
 router.post("/message", validateTokenMiddleware, sendMessage);
 router.get("/message/:chatId", validateTokenMiddleware, allMessages);
 
-// ---------------------- Truck Routes ----------------------------------------------------------------------------------------
+// ---------------------- Truck Routes -----------------------------------------------------------------------------------------------
 
-router.post("/create-transport", validateTokenMiddleware, createTruckInfo);
-router.get("/transport-by-carrierId", validateTokenMiddleware, fetchTruckInfoById);
-router.get("/transport", validateTokenMiddleware, fetchAllTruckInfo);
-router.put("/transport/:truckId", validateTokenMiddleware, updateTruckInfo);
-router.delete("/transport/:truckId", validateTokenMiddleware, deleteTruckInfo);
+router.post("/create-truckData", validateTokenMiddleware, createTruckInfo);
+router.get( "/truckData", validateTokenMiddleware, fetchTruckInfo);
+router.put("/truckData/:truckId", validateTokenMiddleware, updateTruckInfo);
+router.delete("/truckData/:truckId", validateTokenMiddleware, deleteTruckInfo);
+
+// ------------------------- Transport Routes -------------------------------------------------------------------------------------------
+
+router.post("/create-transport", validateTokenMiddleware, createTransportData);
+router.get("/transport", validateTokenMiddleware, fetchTransportData);
+
+// ------------------------- Location Routes --------------------------------------------------------------------------------------------
+
+router.post("/create-location", validateTokenMiddleware, createLocationData);
+router.get("/location", validateTokenMiddleware, fetchLocationData);
+
+// ---------------------- Payment Routes -------------------------------------------------------------------------------------------------
+
+router.post("/create-payment", validateTokenMiddleware, createPaymentData);
+router.get("/payment", validateTokenMiddleware, fetchPaymentData);
+
+// ------------------------ Commision Routes ----------------------------------------------------------------------------------------------
+
+router.post("/create-commision", validateTokenMiddleware, createCommisionData);
+router.get("/commision", validateTokenMiddleware, fetchCommisionData);
+
+// ------------------------- Wallet Routes -------------------------------------------------------------------------------------------------
+
+router.post("/create-wallet", validateTokenMiddleware, createWalletData);
+router.get("/wallet", validateTokenMiddleware, fetchWalletData);
+
+// -------------------------- Review Routes -------------------------------------------------------------------------------------------------
+
+router.post("/create-review", validateTokenMiddleware, createReviewData);
+router.get("/review", validateTokenMiddleware, fetchReviewData);
+
+// --------------------------- Payout Routes -----------------------------------------------------------------------------------------------
+
+router.post("/create-payout", validateTokenMiddleware, createPayoutData);
+router.get("/payout", validateTokenMiddleware, fetchPayoutData);
 
 module.exports = router;

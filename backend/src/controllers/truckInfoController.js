@@ -5,10 +5,10 @@ const createTruckInfo = async function (req, res) {
   try {
     const { truckNumber, capacity } = req.body;
 
-    if (!truckNumber || !capacity) {
+    if (!truckNumber && !capacity) {
       return res.status(400).send({
         status: false,
-        msg: "truckNumber or capacity is required in send data.",
+        msg: "truckNumber and capacity is required in send data.",
       });
     }
 
@@ -38,7 +38,7 @@ const createTruckInfo = async function (req, res) {
   }
 };
 
-const fetchTruckInfoById = async function (req, res) {
+const fetchTruckInfo = async function (req, res) {
   try {
     const userData = await Customer.findOne({
       where: { id: req.person.id },
@@ -46,7 +46,7 @@ const fetchTruckInfoById = async function (req, res) {
     });
 
     if (userData.role === "carrier" && userData.id === req.person.id) {
-      const singleTransportData = await Truck.findAll({
+      const truckData = await Truck.findAll({
         where: { carrierId: req.person.id },
         include: [
           {
@@ -64,44 +64,26 @@ const fetchTruckInfoById = async function (req, res) {
         ],
       });
 
-      if (singleTransportData.length === 0) {
+      if (truckData.length === 0) {
         return res.status(404).send({ status: false, msg: "Data Not Found!" });
       }
 
       return res.status(200).json({
         status: true,
-        singleTransportData,
+        truckData: truckData,
       });
-    }
-  } catch (err) {
-    console.error(err);
-    return res.status(err.status || 500).send(err.message);
-  }
-};
+    } else if (userData.role === "admin") {
+      const allTruckData = await Truck.findAll({});
 
-const fetchAllTruckInfo = async function (req, res) {
-  try {
-    const userData = await Customer.findOne({
-      where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
-    });
-
-    if (userData.role === "admin" && userData.id === req.person.id) {
-      const allTransportData = await Truck.findAll({});
-
-      if (allTransportData.length === 0) {
+      if (allTruckData.length === 0) {
         return res.status(404).send({ status: false, msg: "Data Not Found!" });
       }
 
       return res.status(200).json({
         status: true,
-        allTransportData,
+        allTruckData: allTruckData,
       });
     }
-    return res.status(401).json({
-      status: false,
-      msg: "Not Authorized to Access hole Data!",
-    });
   } catch (err) {
     console.error(err);
     return res.status(err.status || 500).send(err.message);
@@ -173,8 +155,7 @@ const deleteTruckInfo = async function (req, res) {
 
 module.exports = {
   createTruckInfo,
-  fetchAllTruckInfo,
-  fetchTruckInfoById,
+  fetchTruckInfo,
   updateTruckInfo,
   deleteTruckInfo,
 };

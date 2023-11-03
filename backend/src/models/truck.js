@@ -33,7 +33,7 @@ const Truck = sequelize.define(
   await Truck.sync({ force: false });
 })();
 
-Customer.hasMany(Truck, { foreignKey: "carrierId", as: "truckDetails" });
+
 Truck.belongsTo(Customer, { foreignKey: "carrierId", as: "truckDetails" });
 
 module.exports = Truck;

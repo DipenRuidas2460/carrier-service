@@ -2,6 +2,9 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../config/dbConfig");
 const Customer = require("./customer");
 const Transport = require("./transport");
+const Commission = require("./commision");
+const Payout = require("./payout");
+const Wallet = require("./wallet");
 
 const Payment = sequelize.define(
   "Payment",
@@ -13,6 +16,10 @@ const Payment = sequelize.define(
       allowNull: false,
     },
     customerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    receiverId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -48,7 +55,15 @@ const Payment = sequelize.define(
   await Payment.sync({ force: false });
 })();
 
-Payment.belongsTo(Customer, { foreignKey: "customerId", as: "pay" });
+Payment.belongsTo(Customer, { foreignKey: "customerId"});
+Payment.belongsTo(Customer, { foreignKey: "receiverId"});
+
 Payment.belongsTo(Transport, { foreignKey: "transportId", as: "paymentTrans" });
+
+Payment.belongsTo(Payout);
+
+Payment.belongsTo(Commission);
+
+Payment.belongsTo(Wallet)
 
 module.exports = Payment;

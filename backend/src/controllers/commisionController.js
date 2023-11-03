@@ -1,32 +1,26 @@
+const Commission = require("../models/commision");
 const Customer = require("../models/customer");
-const Payment = require("../models/payment");
-const { Op } = require("sequelize");
 
-const createPaymentData = async function (req, res) {
+const createCommisionData = async function (req, res) {
   try {
-    const { truckId, transactionId, paymentStatus, currency, amount } =
-      req.body;
+    const { rate } = req.body;
 
     const userData = await Customer.findOne({
       where: { id: req.person.id },
       attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
     });
 
-    if (userData.role === "customer" && userData.id === req.person.id) {
+    if (userData.role === "carrier" && userData.id === req.person.id) {
       const data = {
-        customerId: req.person.id,
-        truckId,
-        transactionId,
-        amount,
-        currency,
-        paymentStatus,
+        driverId: req.person.id,
+        rate: rate,
       };
 
-      const paymentData = await Payment.create(data);
+      const commisionData = await Commission.create(data);
       return res.status(201).json({
         status: true,
-        message: "Payment Data created Successfully!",
-        paymentData,
+        message: "Commision Data created Successfully!",
+        commisionData,
       });
     }
   } catch (err) {
@@ -35,24 +29,22 @@ const createPaymentData = async function (req, res) {
   }
 };
 
-const fetchPaymentData = async function (req, res) {
+const fetchCommisionData = async function (req, res) {
   try {
     const userData = await Customer.findOne({
       where: { id: req.person.id },
       attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
     });
 
-    if (userData.role !== "admin" && userData.id === req.person.id) {
-      const paymentData = await Payment.findAll({
+    if (userData.role === "carrier" && userData.id === req.person.id) {
+      const commisionData = await Commission.findAll({
         where: {
-          [Op.or]: [
-            { customerId: req.person.id },
-            { receiverId: req.person.id },
-          ],
+          driverId: req.person.id,
         },
         include: [
           {
             model: Customer,
+            as: "commisionPay",
             attributes: [
               "id",
               "fullName",
@@ -65,23 +57,23 @@ const fetchPaymentData = async function (req, res) {
         ],
       });
 
-      if (paymentData.length === 0) {
+      if (commisionData.length === 0) {
         return res.status(400).send({ status: false, msg: "Data Not Found!" });
       }
 
       return res.status(200).json({
         status: true,
-        paymentData: paymentData,
+        commisionData: commisionData,
       });
-    } else {
-      const allPaymentData = await Payment.findAll({});
+    } else if (userData.role === "admin") {
+      const allCommisionData = await Commission.findAll({});
 
-      if (allPaymentData.length === 0) {
+      if (allCommisionData.length === 0) {
         return res.status(404).send({ status: false, msg: "Data Not Found!" });
       }
       return res.status(200).json({
         status: true,
-        allPaymentData: allPaymentData,
+        allCommisionData: allCommisionData,
       });
     }
   } catch (err) {
@@ -90,8 +82,6 @@ const fetchPaymentData = async function (req, res) {
   }
 };
 
+Commission.belongsTo(Customer)
 
-module.exports = {
-  createPaymentData,
-  fetchPaymentData,
-};
+module.exports = { createCommisionData, fetchCommisionData };

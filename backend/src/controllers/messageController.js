@@ -9,7 +9,7 @@ const sendMessage = asyncHandler(async (req, res) => {
 
     const loggedUserId = req.person.id;
 
-    if (!content || !chatId) {
+    if (!content && !chatId) {
       return res
         .status(400)
         .send({ status: false, message: "Invalid data passed into request" });

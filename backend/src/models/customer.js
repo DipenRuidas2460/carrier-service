@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/dbConfig");
+const Wallet = require("./wallet");
 
 const Customer = sequelize.define(
   "Customer",
@@ -46,5 +47,6 @@ const Customer = sequelize.define(
 (async () => {
   await Customer.sync({ force: false });
 })();
+
 
 module.exports = Customer;

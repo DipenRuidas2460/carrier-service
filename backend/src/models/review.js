@@ -45,7 +45,6 @@ const Review = sequelize.define(
 
 
 Review.belongsTo(Customer, { foreignKey: "customerId", as: "customerReview" });
-Review.belongsTo(Customer, { foreignKey: "driverId", as: "driverReview" });
 Review.belongsTo(Transport, { foreignKey: "transportId", as: "trans" });
 
 module.exports = Review;

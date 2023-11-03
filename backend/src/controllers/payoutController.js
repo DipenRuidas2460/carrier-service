@@ -1,32 +1,27 @@
+const Payout= require("../models/payout");
 const Customer = require("../models/customer");
-const Payment = require("../models/payment");
-const { Op } = require("sequelize");
 
-const createPaymentData = async function (req, res) {
+const createPayoutData = async function (req, res) {
   try {
-    const { truckId, transactionId, paymentStatus, currency, amount } =
-      req.body;
+    const { amount, status } = req.body;
 
     const userData = await Customer.findOne({
       where: { id: req.person.id },
       attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
     });
 
-    if (userData.role === "customer" && userData.id === req.person.id) {
+    if (userData.role === "carrier" && userData.id === req.person.id) {
       const data = {
-        customerId: req.person.id,
-        truckId,
-        transactionId,
-        amount,
-        currency,
-        paymentStatus,
+        userId: req.person.id,
+        amount: amount,
+        status:status
       };
 
-      const paymentData = await Payment.create(data);
+      const payoutData = await Payout.create(data);
       return res.status(201).json({
         status: true,
-        message: "Payment Data created Successfully!",
-        paymentData,
+        message: "Payout Data created Successfully!",
+        payoutData,
       });
     }
   } catch (err) {
@@ -35,24 +30,22 @@ const createPaymentData = async function (req, res) {
   }
 };
 
-const fetchPaymentData = async function (req, res) {
+const fetchPayoutData = async function (req, res) {
   try {
     const userData = await Customer.findOne({
       where: { id: req.person.id },
       attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
     });
 
-    if (userData.role !== "admin" && userData.id === req.person.id) {
-      const paymentData = await Payment.findAll({
+    if (userData.role === "carrier" && userData.id === req.person.id) {
+      const payoutData = await Payout.findAll({
         where: {
-          [Op.or]: [
-            { customerId: req.person.id },
-            { receiverId: req.person.id },
-          ],
+          userId: req.person.id,
         },
         include: [
           {
             model: Customer,
+            as:"payout-money",
             attributes: [
               "id",
               "fullName",
@@ -65,23 +58,23 @@ const fetchPaymentData = async function (req, res) {
         ],
       });
 
-      if (paymentData.length === 0) {
+      if (payoutData.length === 0) {
         return res.status(400).send({ status: false, msg: "Data Not Found!" });
       }
 
       return res.status(200).json({
         status: true,
-        paymentData: paymentData,
+        payoutData: payoutData,
       });
-    } else {
-      const allPaymentData = await Payment.findAll({});
+    } else if (userData.role === "admin") {
+      const allPayoutData = await Payout.findAll({});
 
-      if (allPaymentData.length === 0) {
+      if (allPayoutData.length === 0) {
         return res.status(404).send({ status: false, msg: "Data Not Found!" });
       }
       return res.status(200).json({
         status: true,
-        allPaymentData: allPaymentData,
+        allPayoutData: allPayoutData,
       });
     }
   } catch (err) {
@@ -90,8 +83,4 @@ const fetchPaymentData = async function (req, res) {
   }
 };
 
-
-module.exports = {
-  createPaymentData,
-  fetchPaymentData,
-};
+module.exports = { createPayoutData, fetchPayoutData };

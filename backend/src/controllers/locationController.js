@@ -1,11 +1,10 @@
 const Customer = require("../models/customer");
-const Payment = require("../models/payment");
+const Location = require("../models/location");
 const { Op } = require("sequelize");
 
-const createPaymentData = async function (req, res) {
+const createLocationData = async function (req, res) {
   try {
-    const { truckId, transactionId, paymentStatus, currency, amount } =
-      req.body;
+    const { driverId, transportId, latitude, longitude, address } = req.body;
 
     const userData = await Customer.findOne({
       where: { id: req.person.id },
@@ -15,18 +14,18 @@ const createPaymentData = async function (req, res) {
     if (userData.role === "customer" && userData.id === req.person.id) {
       const data = {
         customerId: req.person.id,
-        truckId,
-        transactionId,
-        amount,
-        currency,
-        paymentStatus,
+        driverId,
+        transportId,
+        latitude,
+        longitude,
+        address,
       };
 
-      const paymentData = await Payment.create(data);
+      const locationData = await Location.create(data);
       return res.status(201).json({
         status: true,
-        message: "Payment Data created Successfully!",
-        paymentData,
+        message: "Location Data created Successfully!",
+        locationData,
       });
     }
   } catch (err) {
@@ -35,7 +34,7 @@ const createPaymentData = async function (req, res) {
   }
 };
 
-const fetchPaymentData = async function (req, res) {
+const fetchLocationData = async function (req, res) {
   try {
     const userData = await Customer.findOne({
       where: { id: req.person.id },
@@ -43,12 +42,9 @@ const fetchPaymentData = async function (req, res) {
     });
 
     if (userData.role !== "admin" && userData.id === req.person.id) {
-      const paymentData = await Payment.findAll({
+      const locationData = await Location.findAll({
         where: {
-          [Op.or]: [
-            { customerId: req.person.id },
-            { receiverId: req.person.id },
-          ],
+          [Op.or]: [{ customerId: req.person.id }, { driverId: req.person.id }],
         },
         include: [
           {
@@ -65,23 +61,23 @@ const fetchPaymentData = async function (req, res) {
         ],
       });
 
-      if (paymentData.length === 0) {
+      if (locationData.length === 0) {
         return res.status(400).send({ status: false, msg: "Data Not Found!" });
       }
 
       return res.status(200).json({
         status: true,
-        paymentData: paymentData,
+        locationData: locationData,
       });
     } else {
-      const allPaymentData = await Payment.findAll({});
+      const allLocationData = await Location.findAll({});
 
-      if (allPaymentData.length === 0) {
+      if (allLocationData.length === 0) {
         return res.status(404).send({ status: false, msg: "Data Not Found!" });
       }
       return res.status(200).json({
         status: true,
-        allPaymentData: allPaymentData,
+        allLocationData: allLocationData,
       });
     }
   } catch (err) {
@@ -90,8 +86,7 @@ const fetchPaymentData = async function (req, res) {
   }
 };
 
-
 module.exports = {
-  createPaymentData,
-  fetchPaymentData,
+  createLocationData,
+  fetchLocationData,
 };

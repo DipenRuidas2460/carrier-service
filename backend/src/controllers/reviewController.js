@@ -1,11 +1,10 @@
 const Customer = require("../models/customer");
-const Payment = require("../models/payment");
+const Review = require("../models/review");
 const { Op } = require("sequelize");
 
-const createPaymentData = async function (req, res) {
+const createReviewData = async function (req, res) {
   try {
-    const { truckId, transactionId, paymentStatus, currency, amount } =
-      req.body;
+    const { driverId, transportId, rating, comment } = req.body;
 
     const userData = await Customer.findOne({
       where: { id: req.person.id },
@@ -15,18 +14,17 @@ const createPaymentData = async function (req, res) {
     if (userData.role === "customer" && userData.id === req.person.id) {
       const data = {
         customerId: req.person.id,
-        truckId,
-        transactionId,
-        amount,
-        currency,
-        paymentStatus,
+        driverId,
+        transportId,
+        rating,
+        comment,
       };
 
-      const paymentData = await Payment.create(data);
+      const reviewData = await Review.create(data);
       return res.status(201).json({
         status: true,
-        message: "Payment Data created Successfully!",
-        paymentData,
+        message: "Review Data created Successfully!",
+        reviewData,
       });
     }
   } catch (err) {
@@ -35,24 +33,22 @@ const createPaymentData = async function (req, res) {
   }
 };
 
-const fetchPaymentData = async function (req, res) {
+const fetchReviewData = async function (req, res) {
   try {
     const userData = await Customer.findOne({
       where: { id: req.person.id },
       attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
     });
 
-    if (userData.role !== "admin" && userData.id === req.person.id) {
-      const paymentData = await Payment.findAll({
+    if (userData.role === "customer" && userData.id === req.person.id) {
+      const reviewData = await Review.findAll({
         where: {
-          [Op.or]: [
-            { customerId: req.person.id },
-            { receiverId: req.person.id },
-          ],
+          customerId: req.person.id,
         },
         include: [
           {
             model: Customer,
+            as: "customerReview",
             attributes: [
               "id",
               "fullName",
@@ -65,23 +61,23 @@ const fetchPaymentData = async function (req, res) {
         ],
       });
 
-      if (paymentData.length === 0) {
+      if (reviewData.length === 0) {
         return res.status(400).send({ status: false, msg: "Data Not Found!" });
       }
 
       return res.status(200).json({
         status: true,
-        paymentData: paymentData,
+        reviewData: reviewData,
       });
-    } else {
-      const allPaymentData = await Payment.findAll({});
+    } else if (userData.role === "admin") {
+      const allReviewData = await Review.findAll({});
 
-      if (allPaymentData.length === 0) {
+      if (allReviewData.length === 0) {
         return res.status(404).send({ status: false, msg: "Data Not Found!" });
       }
       return res.status(200).json({
         status: true,
-        allPaymentData: allPaymentData,
+        allReviewData: allReviewData,
       });
     }
   } catch (err) {
@@ -90,8 +86,7 @@ const fetchPaymentData = async function (req, res) {
   }
 };
 
-
 module.exports = {
-  createPaymentData,
-  fetchPaymentData,
+  createReviewData,
+  fetchReviewData,
 };

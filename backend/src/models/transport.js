@@ -1,10 +1,9 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/dbConfig");
 const Customer = require("./customer");
-const Payment = require("./payment");
 
 const Transport = sequelize.define(
-  "Transport ",
+  "Transport",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -38,17 +37,16 @@ const Transport = sequelize.define(
     },
   },
   {
-    tableName: "Transport ",
+    tableName: "Transport",
     updatedAt: false,
   }
 );
 
 (async () => {
-  await Truck.sync({ force: false });
+  await Transport.sync({ force: false });
 })();
 
-Transport.hasOne(Payment);
-Transport.belongsTo(Customer, { foreignKey: "customerId", as: "transCustomer" });
-Transport.belongsTo(Customer, { foreignKey: "driverId", as: "transDriver" });
+Transport.belongsTo(Customer, { foreignKey: "customerId"});
+Transport.belongsTo(Customer, { foreignKey: "driverId"});
 
 module.exports = Transport;

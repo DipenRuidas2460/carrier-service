@@ -47,8 +47,11 @@ const Location = sequelize.define(
   await Location.sync({ force: false });
 })();
 
-Location.belongsTo(Customer, { foreignKey: "customerId", as: "customerLocation" });
-Location.belongsTo(Customer, { foreignKey: "driverId", as: "driverLocation" });
-Location.belongsTo(Transport, { foreignKey: "transportId", as: "transLocation" });
+Location.belongsTo(Customer, { foreignKey: "customerId" });
+Location.belongsTo(Customer, { foreignKey: "driverId" });
+Location.belongsTo(Transport, {
+  foreignKey: "transportId",
+  as: "transLocation",
+});
 
 module.exports = Location;
