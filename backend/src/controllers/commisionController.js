@@ -7,12 +7,12 @@ const createCommisionData = async function (req, res) {
 
     const userData = await Customer.findOne({
       where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
+      attributes: ["id", "role"],
     });
 
-    if (userData.role === "carrier" && userData.id === req.person.id) {
+    if (userData.role === "admin" && userData.id === req.person.id) {
       const data = {
-        driverId: req.person.id,
+        adminId: req.person.id,
         rate: rate,
       };
 
@@ -33,26 +33,19 @@ const fetchCommisionData = async function (req, res) {
   try {
     const userData = await Customer.findOne({
       where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
+      attributes: ["id", "role"],
     });
 
-    if (userData.role === "carrier" && userData.id === req.person.id) {
-      const commisionData = await Commission.findAll({
+    if (userData.role === "admin" && userData.id === req.person.id) {
+      const commisionData = await Commission.findOne({
         where: {
-          driverId: req.person.id,
+          adminId: req.person.id,
         },
         include: [
           {
             model: Customer,
-            as: "commisionPay",
-            attributes: [
-              "id",
-              "fullName",
-              "email",
-              "photo",
-              "phoneNumber",
-              "role",
-            ],
+            as: "commisionCut",
+            attributes: ["id", "role"],
           },
         ],
       });
@@ -65,16 +58,6 @@ const fetchCommisionData = async function (req, res) {
         status: true,
         commisionData: commisionData,
       });
-    } else if (userData.role === "admin") {
-      const allCommisionData = await Commission.findAll({});
-
-      if (allCommisionData.length === 0) {
-        return res.status(404).send({ status: false, msg: "Data Not Found!" });
-      }
-      return res.status(200).json({
-        status: true,
-        allCommisionData: allCommisionData,
-      });
     }
   } catch (err) {
     console.error(err);
@@ -82,6 +65,6 @@ const fetchCommisionData = async function (req, res) {
   }
 };
 
-Commission.belongsTo(Customer)
+Commission.belongsTo(Customer);
 
 module.exports = { createCommisionData, fetchCommisionData };

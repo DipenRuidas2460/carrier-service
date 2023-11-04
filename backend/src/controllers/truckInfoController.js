@@ -3,7 +3,8 @@ const Truck = require("../models/truck");
 
 const createTruckInfo = async function (req, res) {
   try {
-    const { truckNumber, capacity } = req.body;
+    const { truckNumber, capacity, availability, locationAvailability } =
+      req.body;
 
     if (!truckNumber && !capacity) {
       return res.status(400).send({
@@ -14,15 +15,16 @@ const createTruckInfo = async function (req, res) {
 
     const userData = await Customer.findOne({
       where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
+      attributes: ["id", "role"],
     });
 
     if (userData.role === "carrier" && userData.id === req.person.id) {
       const storeData = {
         carrierId: req.person.id,
         truckNumber,
-        price,
+        availability,
         capacity,
+        locationAvailability,
       };
 
       const transportData = await Truck.create(storeData);
@@ -42,7 +44,7 @@ const fetchTruckInfo = async function (req, res) {
   try {
     const userData = await Customer.findOne({
       where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
+      attributes: ["id", "role"],
     });
 
     if (userData.role === "carrier" && userData.id === req.person.id) {
@@ -52,14 +54,7 @@ const fetchTruckInfo = async function (req, res) {
           {
             model: Customer,
             as: "truckDetails",
-            attributes: [
-              "id",
-              "fullName",
-              "email",
-              "photo",
-              "phoneNumber",
-              "role",
-            ],
+            attributes: ["id", "fullName", "email", "role"],
           },
         ],
       });

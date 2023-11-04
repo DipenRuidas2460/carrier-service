@@ -43,8 +43,8 @@ const Review = sequelize.define(
   await Review.sync({ force: false });
 })();
 
-
 Review.belongsTo(Customer, { foreignKey: "customerId", as: "customerReview" });
+Review.belongsTo(Customer, { foreignKey: "driverId" });
 Review.belongsTo(Transport, { foreignKey: "transportId", as: "trans" });
 
 module.exports = Review;

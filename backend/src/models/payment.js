@@ -19,10 +19,6 @@ const Payment = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    receiverId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     transportId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -35,10 +31,6 @@ const Payment = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       trim: true,
-    },
-    currency: {
-      type: DataTypes.STRING,
-      allowNull: false,
     },
     paymentStatus: {
       type: DataTypes.ENUM("success", "pending", "failed"),
@@ -56,7 +48,6 @@ const Payment = sequelize.define(
 })();
 
 Payment.belongsTo(Customer, { foreignKey: "customerId"});
-Payment.belongsTo(Customer, { foreignKey: "receiverId"});
 
 Payment.belongsTo(Transport, { foreignKey: "transportId", as: "paymentTrans" });
 

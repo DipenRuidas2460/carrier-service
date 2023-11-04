@@ -5,7 +5,7 @@ const Customer = require("./customer");
 const Commission = sequelize.define(
   "Commission",
   {
-    driverId: {
+    adminId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -24,6 +24,6 @@ const Commission = sequelize.define(
   await Commission.sync({ force: false });
 })();
 
-Commission.belongsTo(Customer, { foreignKey: "driverId", as: "commisionPay" });
+Commission.belongsTo(Customer, { foreignKey: "adminId", as: "commisionCut" });
 
 module.exports = Commission;

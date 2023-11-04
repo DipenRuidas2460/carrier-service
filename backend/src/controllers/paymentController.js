@@ -4,21 +4,19 @@ const { Op } = require("sequelize");
 
 const createPaymentData = async function (req, res) {
   try {
-    const { truckId, transactionId, paymentStatus, currency, amount } =
-      req.body;
+    const { transportId, transactionId, paymentStatus, amount } = req.body;
 
     const userData = await Customer.findOne({
       where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
+      attributes: ["id", "role"],
     });
 
     if (userData.role === "customer" && userData.id === req.person.id) {
       const data = {
         customerId: req.person.id,
-        truckId,
+        transportId,
         transactionId,
         amount,
-        currency,
         paymentStatus,
       };
 
@@ -39,28 +37,18 @@ const fetchPaymentData = async function (req, res) {
   try {
     const userData = await Customer.findOne({
       where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
+      attributes: ["id", "role"],
     });
 
-    if (userData.role !== "admin" && userData.id === req.person.id) {
+    if (userData.role === "customer" && userData.id === req.person.id) {
       const paymentData = await Payment.findAll({
         where: {
-          [Op.or]: [
-            { customerId: req.person.id },
-            { receiverId: req.person.id },
-          ],
+          customerId: req.person.id,
         },
         include: [
           {
             model: Customer,
-            attributes: [
-              "id",
-              "fullName",
-              "email",
-              "photo",
-              "phoneNumber",
-              "role",
-            ],
+            attributes: ["id", "fullName", "email", "role"],
           },
         ],
       });
@@ -73,7 +61,7 @@ const fetchPaymentData = async function (req, res) {
         status: true,
         paymentData: paymentData,
       });
-    } else {
+    } else if (userData.role === "admin") {
       const allPaymentData = await Payment.findAll({});
 
       if (allPaymentData.length === 0) {
@@ -89,7 +77,6 @@ const fetchPaymentData = async function (req, res) {
     return res.status(err.status || 500).send(err.message);
   }
 };
-
 
 module.exports = {
   createPaymentData,

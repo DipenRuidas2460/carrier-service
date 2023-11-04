@@ -4,21 +4,18 @@ const { Op } = require("sequelize");
 
 const createLocationData = async function (req, res) {
   try {
-    const { driverId, transportId, latitude, longitude, address } = req.body;
+    const { transportId, locationName } = req.body;
 
     const userData = await Customer.findOne({
       where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
+      attributes: ["id", "role"],
     });
 
     if (userData.role === "customer" && userData.id === req.person.id) {
       const data = {
         customerId: req.person.id,
-        driverId,
         transportId,
-        latitude,
-        longitude,
-        address,
+        locationName,
       };
 
       const locationData = await Location.create(data);
@@ -38,25 +35,18 @@ const fetchLocationData = async function (req, res) {
   try {
     const userData = await Customer.findOne({
       where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
+      attributes: ["id", "role"],
     });
 
-    if (userData.role !== "admin" && userData.id === req.person.id) {
+    if (userData.role === "customer" && userData.id === req.person.id) {
       const locationData = await Location.findAll({
         where: {
-          [Op.or]: [{ customerId: req.person.id }, { driverId: req.person.id }],
+          customerId: req.person.id,
         },
         include: [
           {
             model: Customer,
-            attributes: [
-              "id",
-              "fullName",
-              "email",
-              "photo",
-              "phoneNumber",
-              "role",
-            ],
+            attributes: ["id", "fullName", "email", "role"],
           },
         ],
       });
@@ -69,7 +59,7 @@ const fetchLocationData = async function (req, res) {
         status: true,
         locationData: locationData,
       });
-    } else {
+    } else if (userData.role === "admin") {
       const allLocationData = await Location.findAll({});
 
       if (allLocationData.length === 0) {

@@ -1,4 +1,4 @@
-const Payout= require("../models/payout");
+const Payout = require("../models/payout");
 const Customer = require("../models/customer");
 
 const createPayoutData = async function (req, res) {
@@ -7,14 +7,14 @@ const createPayoutData = async function (req, res) {
 
     const userData = await Customer.findOne({
       where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
+      attributes: ["id", "role"],
     });
 
     if (userData.role === "carrier" && userData.id === req.person.id) {
       const data = {
-        userId: req.person.id,
+        carrierId: req.person.id,
         amount: amount,
-        status:status
+        status: status,
       };
 
       const payoutData = await Payout.create(data);
@@ -34,7 +34,7 @@ const fetchPayoutData = async function (req, res) {
   try {
     const userData = await Customer.findOne({
       where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
+      attributes: ["id", "role"],
     });
 
     if (userData.role === "carrier" && userData.id === req.person.id) {
@@ -45,15 +45,8 @@ const fetchPayoutData = async function (req, res) {
         include: [
           {
             model: Customer,
-            as:"payout-money",
-            attributes: [
-              "id",
-              "fullName",
-              "email",
-              "photo",
-              "phoneNumber",
-              "role",
-            ],
+            as: "payout-money",
+            attributes: ["id", "fullName", "email", "role"],
           },
         ],
       });

@@ -22,6 +22,14 @@ const Truck = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    availability: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+    locationAvailability: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   },
   {
     tableName: "Truck",
@@ -32,7 +40,6 @@ const Truck = sequelize.define(
 (async () => {
   await Truck.sync({ force: false });
 })();
-
 
 Truck.belongsTo(Customer, { foreignKey: "carrierId", as: "truckDetails" });
 

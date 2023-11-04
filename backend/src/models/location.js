@@ -16,23 +16,11 @@ const Location = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    driverId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
     transportId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    latitude: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    longitude: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    address: {
+    locationName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -48,7 +36,6 @@ const Location = sequelize.define(
 })();
 
 Location.belongsTo(Customer, { foreignKey: "customerId" });
-Location.belongsTo(Customer, { foreignKey: "driverId" });
 Location.belongsTo(Transport, {
   foreignKey: "transportId",
   as: "transLocation",

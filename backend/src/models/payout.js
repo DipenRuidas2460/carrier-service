@@ -6,7 +6,7 @@ const Wallet = require("./wallet");
 const Payout = sequelize.define(
   "Payout",
   {
-    userId: {
+    carrierId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -29,7 +29,7 @@ const Payout = sequelize.define(
   await Payout.sync({ force: false });
 })();
 
-Payout.belongsTo(Customer, { foreignKey: "userId", as: "payout-money" });
+Payout.belongsTo(Customer, { foreignKey: "carrierId", as: "payout-money" });
 Payout.belongsTo(Wallet);
 
 module.exports = Payout;

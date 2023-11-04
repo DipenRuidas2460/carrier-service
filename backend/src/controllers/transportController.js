@@ -52,8 +52,6 @@ const fetchTransportData = async function (req, res) {
               "id",
               "fullName",
               "email",
-              "photo",
-              "phoneNumber",
               "role",
             ],
           },
