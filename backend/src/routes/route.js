@@ -54,7 +54,7 @@ router.patch(
   updatePassword
 );
 router.get("/customer/getUserById", validateTokenMiddleware, getUserById);
-router.get("/customergetAllUsers", validateTokenMiddleware, getAllUsers);
+router.get("/customer/getAllUsers", validateTokenMiddleware, getAllUsers);
 
 // --------------------- Chat Routes ----------------------------------------------------------------------------------------------
 

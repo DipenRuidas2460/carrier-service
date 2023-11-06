@@ -8,7 +8,7 @@ const createWalletData = async function (req, res) {
 
     const userData = await Customer.findOne({
       where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
+      attributes: ["id", "role"],
     });
 
     if (userData.role === "carrier" && userData.id === req.person.id) {
@@ -34,7 +34,7 @@ const fetchWalletData = async function (req, res) {
   try {
     const userData = await Customer.findOne({
       where: { id: req.person.id },
-      attributes: ["id", "fullName", "email", "phoneNumber", "role", "photo"],
+      attributes: ["id", "role"],
     });
 
     if (userData.role === "carrier" && userData.id === req.person.id) {
@@ -46,11 +46,7 @@ const fetchWalletData = async function (req, res) {
           {
             model: Customer,
             as: "wallet-money",
-            attributes: [
-              "id",
-              "fullName",
-              "role",
-            ],
+            attributes: ["id", "fullName", "role"],
           },
         ],
       });

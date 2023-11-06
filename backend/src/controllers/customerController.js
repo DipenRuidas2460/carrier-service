@@ -123,7 +123,7 @@ const login = asyncHandler(async (req, res) => {
       secretKey,
       { expiresIn }
     );
-    const data = {
+    const loginData = {
       userId: userDetails.id,
       fullName: userDetails.fullName,
       email: userDetails.email,
@@ -138,7 +138,7 @@ const login = asyncHandler(async (req, res) => {
     return res.status(200).json({
       status: "success",
       token,
-      userdata: data,
+      loginData,
       message: "Login successfull",
     });
   } catch (error) {
