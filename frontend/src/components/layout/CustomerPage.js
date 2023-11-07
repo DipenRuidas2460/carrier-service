@@ -1,11 +1,21 @@
-import React from 'react'
+import React from "react";
+import Header from "./Header";
+import CustomerDesign from "../modules/CustomerDesign";
+import NotFound from "../partials/404";
 
-function CustomerPage() {
+function CustomerPage({token}) {
   return (
     <div>
-      CustomerPage
+      {token ? (
+        <>
+          <Header />
+          <CustomerDesign />
+        </>
+      ) : (
+        <NotFound />
+      )}
     </div>
-  )
+  );
 }
 
-export default CustomerPage
+export default CustomerPage;

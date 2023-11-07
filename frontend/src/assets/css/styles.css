@@ -11698,7 +11698,7 @@ body {
 .App {
   min-height: 100vh;
   display: flex;
-  background-image: url("../images/background.png");
+  /* background-image: url("../images/background.png"); */
   background-size: cover;
   background-position: center;
 }
@@ -11719,7 +11719,7 @@ body {
   color: blue;
 }
 
-.newChatPage{
+.newChatPage {
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -11727,7 +11727,7 @@ body {
   padding: 10px;
 }
 
-.sidebar-chat{
+.sidebar-chat {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -11737,9 +11737,84 @@ body {
   background-color: #fff;
 }
 
-.messages{
+.messages {
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
   scrollbar-width: none;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 5px;
+  border-bottom: 2px solid gray;
+}
+
+.header-text {
+  font-size: 14px;
+  padding-left: 5px;
+}
+
+.header-menu {
+  display: flex;
+  padding-left: 30%;
+  align-items: center;
+}
+
+.header-icon {
+  display: flex;
+  padding: 15%;
+  align-items: center;
+  cursor: pointer;
+}
+
+.header-final {
+  display: flex;
+  align-items: center;
+}
+
+.custom-parent {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.custom-search{
+  width: 20%;
+}
+
+
+.search-str{
+  font-size: 20px;
+}
+
+.search-section{
+  padding: 10px;
+  border: 2px solid;
+}
+
+@media (min-width: 768px) {
+  .search-section {
+    padding: 1.5rem;
+  }
+}
+
+.search-section {
+  border-radius: 1.5rem;
+}
+
+@media (max-width: 576px) {
+  .custom-parent {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    padding: 1.5rem;
+  }
+
+  .custom-child {
+    grid-column: span 2;
+    margin-left: 0;
+  }
 }

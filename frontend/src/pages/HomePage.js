@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Login from "../components/modules/auth/Login";
 import { useNavigate } from "react-router-dom";
 
-function HomePage({ showAlert }) {
+function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -10,10 +10,9 @@ function HomePage({ showAlert }) {
     if (!user) navigate("/404");
   }, [navigate]);
 
-
   return (
     <div>
-      <Login showAlert={showAlert} />
+      <Login />
     </div>
   );
 }

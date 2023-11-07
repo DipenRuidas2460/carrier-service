@@ -27,9 +27,6 @@ import ProfileMenu from "./ProfileMenu";
 import axios from "axios";
 import ChatLoading from "../modules/ChatLoading";
 import UserListItems from "../userAvatar/UserListItems";
-// import { getSender } from "../../chatLogic/chatLogics";
-// import NotificationBadge from "react-notification-badge";
-// import { Effect } from "react-notification-badge";
 
 function SideBarDrawer() {
   const [search, setSearch] = useState("");
@@ -43,8 +40,6 @@ function SideBarDrawer() {
     setSelectedChat,
     chats,
     setChats,
-    // notification,
-    // setNotification,
   } = ChatState();
   const navigate = useNavigate();
   const toast = useToast();

@@ -17,10 +17,7 @@ function Login() {
       .post(`${host}/customer/login`, input)
       .then((result) => {
         if (result.data.status === "success") {
-          localStorage.setItem(
-            "userInfo",
-            JSON.stringify(result.data.loginData)
-          );
+          localStorage.setItem("userInfo", JSON.stringify(result.data.userdata));
           localStorage.setItem("token", result.data.token);
           toast({
             title: "User Logged-In Successfully!",
@@ -29,9 +26,9 @@ function Login() {
             isClosable: true,
             position: "top-right",
           });
-          if (result.data.loginData.role === "admin") {
+          if (result.data.userdata.role === "admin") {
             navigate("/master");
-          } else if (result.data.loginData.role === "customer") {
+          } else if (result.data.userdata.role === "customer") {
             navigate("/customer");
           } else {
             navigate("/carrier");
