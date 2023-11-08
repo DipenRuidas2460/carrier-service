@@ -5,8 +5,9 @@ function SearchSection() {
   return (
     <div className="search-section">
       <strong className="search-str">Get a transport</strong>
-      <InputItem/>
-      <InputItem/>
+      <InputItem type="source"/>
+      <InputItem type="destination"/>
+      <button className="search-button">Search</button>
     </div>
   );
 }
