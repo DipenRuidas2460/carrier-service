@@ -12,9 +12,11 @@ function ChatProvider({ children }) {
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    if (!userInfo) navigate("/");
-    else setUser(userInfo);
-    
+    setUser(userInfo);
+
+    if (!userInfo) {
+      navigate("/");
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

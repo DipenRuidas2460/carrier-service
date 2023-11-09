@@ -1,9 +1,10 @@
 import React from "react";
 import Header from "./Header";
 import CustomerDesign from "../modules/CustomerDesign";
-import NotFound from "../partials/404";
+import { useNavigate } from "react-router-dom";
 
-function CustomerPage({token}) {
+function CustomerPage({ token, userInfo }) {
+  const navigate = useNavigate();
   return (
     <div>
       {token ? (
@@ -12,7 +13,7 @@ function CustomerPage({token}) {
           <CustomerDesign />
         </>
       ) : (
-        <NotFound />
+        navigate("/404")
       )}
     </div>
   );

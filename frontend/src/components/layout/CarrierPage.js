@@ -1,9 +1,9 @@
-import React from 'react'
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-function CarrierPage() {
-  return (
-    <div>CarrierPage</div>
-  )
+function CarrierPage({ token, userInfo }) {
+  const navigate = useNavigate();
+  return token ? <div>CarrierPage</div> : navigate("/404");
 }
 
-export default CarrierPage
+export default CarrierPage;

@@ -52,7 +52,8 @@ function Register() {
         .post(`${host}/customer/register`, formData)
         .then((res) => {
           if (res.data.status === 200) {
-            localStorage.setItem("token", res.token);
+            localStorage.setItem("userInfo", res.data.registerUserData);
+            localStorage.setItem("token", res.data.token);
             toast({
               title: "Account Created Sucessfully!",
               status: "success",
@@ -219,9 +220,9 @@ function Register() {
                   </div>
                   <p className="mt-2" style={{ color: "white" }}>
                     Already have a account please click here to{" "}
-                    <a href="/" style={{ color: "yellow" }}>
+                    <span onClick={()=>navigate('/')} style={{ color: "yellow", cursor:'pointer' }}>
                       LogIn
-                    </a>
+                    </span>
                   </p>
                 </div>
               </div>

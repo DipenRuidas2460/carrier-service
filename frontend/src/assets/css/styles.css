@@ -11825,6 +11825,15 @@ body {
   border-radius: 0.5rem;
 }
 
+.truck-list-option{
+  margin-top:1.25rem ;
+}
+
+.truck-list-option > h2{
+  font-size: 22px;
+  font-weight: bold;
+}
+
 
 @media (min-width: 768px) {
   .search-section {

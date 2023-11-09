@@ -65,10 +65,20 @@ const addUser = asyncHandler(async (req, res) => {
     if (response) {
       const { id, fullName, email, phoneNumber, role, photo } = response;
 
+      const registerUserData = {
+        id,
+        fullName,
+        email,
+        phoneNumber,
+        role,
+        photo,
+      }
+
       res.header("Authorization", `Bearer ${token}`);
 
       return res.status(201).json({
         status: 200,
+        registerUserData,
         id,
         fullName,
         email,

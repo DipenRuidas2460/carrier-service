@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Box } from "@chakra-ui/react";
 import { useState } from "react";
 
-function ChatPage({ token }) {
+function ChatPage({ token, userInfo }) {
   const [fetchAgain, setFetchAgain] = useState(false);
   const { user } = ChatState();
   const navigate = useNavigate();

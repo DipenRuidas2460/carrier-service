@@ -3,9 +3,10 @@ import Nav from "../partials/Nav";
 import SideBar from "../partials/SideBar";
 import Footer from "../partials/Footer";
 import Dashboard from "../modules/Dashboard";
-import NotFound from "../partials/404";
+import { useNavigate } from "react-router-dom";
 
-function Master({ token}) {
+function Master({ token, userInfo }) {
+  const navigate = useNavigate();
   return (
     <div>
       {token ? (
@@ -20,7 +21,7 @@ function Master({ token}) {
           </div>
         </>
       ) : (
-        <NotFound />
+        navigate("/404")
       )}
     </div>
   );

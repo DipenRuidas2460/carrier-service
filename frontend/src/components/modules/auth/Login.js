@@ -17,7 +17,10 @@ function Login() {
       .post(`${host}/customer/login`, input)
       .then((result) => {
         if (result.data.status === "success") {
-          localStorage.setItem("userInfo", JSON.stringify(result.data.userdata));
+          localStorage.setItem(
+            "userInfo",
+            JSON.stringify(result.data.userdata)
+          );
           localStorage.setItem("token", result.data.token);
           toast({
             title: "User Logged-In Successfully!",
@@ -26,6 +29,7 @@ function Login() {
             isClosable: true,
             position: "top-right",
           });
+
           if (result.data.userdata.role === "admin") {
             navigate("/master");
           } else if (result.data.userdata.role === "customer") {
@@ -33,6 +37,7 @@ function Login() {
           } else {
             navigate("/carrier");
           }
+          window.location.reload()
         } else {
           navigate("/register");
           toast({
@@ -108,18 +113,21 @@ function Login() {
                   <div className="d-grid mt-3 pb-2">
                     <button className={"btn btn-outline-warning"}>Login</button>
                   </div>
-                  <a
+                  <span
                     className="mt-2"
-                    href="/forgotpass"
+                    onClick={() => navigate("/forgotpass")}
                     style={{ color: "yellow", cursor: "pointer" }}
                   >
                     Forgot Password?
-                  </a>
+                  </span>
                   <p className="mt-2" style={{ color: "white" }}>
                     Don't have any account please{" "}
-                    <a href="/register" style={{ color: "yellow" }}>
+                    <span
+                      onClick={() => navigate("/register")}
+                      style={{ color: "yellow", cursor: "pointer" }}
+                    >
                       Register
-                    </a>
+                    </span>
                   </p>
                 </div>
               </div>

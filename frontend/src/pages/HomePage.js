@@ -7,7 +7,9 @@ function HomePage() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("userInfo"));
-    if (!user) navigate("/404");
+    if (!user) {
+      navigate("/404");
+    }
   }, [navigate]);
 
   return (

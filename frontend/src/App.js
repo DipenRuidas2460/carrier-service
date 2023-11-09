@@ -15,6 +15,7 @@ import CarrierPage from "./components/layout/CarrierPage";
 
 function App() {
   const token = localStorage.getItem("token");
+  const userInfo = localStorage.getItem("userInfo");
 
   return (
     <div className="App">
@@ -36,23 +37,27 @@ function App() {
             path="/success-pass-change"
             element={<SuccessfulPasswordChangeMsg />}
           />
-          {token !== undefined && (
+          {token !== undefined && userInfo !== undefined && (
             <>
-              <Route exact path="/master" element={<Master token={token} />} />
+              <Route
+                exact
+                path="/master"
+                element={<Master token={token} userInfo={userInfo} />}
+              />
               <Route
                 exact
                 path="/customer"
-                element={<CustomerPage token={token} />}
+                element={<CustomerPage token={token} userInfo={userInfo} />}
               />
               <Route
                 exact
                 path="/carrier"
-                element={<CarrierPage token={token} />}
+                element={<CarrierPage token={token} userInfo={userInfo} />}
               />
               <Route
                 exact
                 path="/new-chats"
-                element={<ChatPage token={token} />}
+                element={<ChatPage token={token} userInfo={userInfo} />}
               />
             </>
           )}

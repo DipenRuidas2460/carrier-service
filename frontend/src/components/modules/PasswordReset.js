@@ -10,7 +10,7 @@ function PasswordReset() {
   const emailForgotPass = useRef();
   const emailForgotPass1 = useRef();
   const navigate = useNavigate();
-  const toast = useToast()
+  const toast = useToast();
 
   const handleForgotPass = () => {
     if (emailForgotPass.current.value !== emailForgotPass1.current.value) {
@@ -117,14 +117,20 @@ function PasswordReset() {
 
                 <p className="mt-2" style={{ color: "white" }}>
                   Don't have any account please{" "}
-                  <a href="/register" style={{ color: "yellow" }}>
+                  <span
+                    onClick={() => navigate("/register")}
+                    style={{ color: "yellow", cursor: "pointer" }}
+                  >
                     Register
-                  </a>
+                  </span>
                   <br></br>
                   If Continue to{" "}
-                  <a href="/" style={{ color: "yellow" }}>
-                    Login
-                  </a>
+                  <span
+                    onClick={() => navigate("/")}
+                    style={{ color: "yellow", cursor: "pointer" }}
+                  >
+                    LogIn
+                  </span>
                 </p>
               </div>
             </div>
