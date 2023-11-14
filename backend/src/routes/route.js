@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+const Stripe = require("stripe");
+require("dotenv").config();
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+
 const {
   login,
   addUser,
@@ -33,12 +37,30 @@ const {
 } = require("../controllers/truckInfoController");
 
 const { validateTokenMiddleware } = require("../middleware/auth");
-const { createTransportData, fetchTransportData } = require("../controllers/transportController");
-const { createLocationData, fetchLocationData } = require("../controllers/locationController");
-const { createCommisionData, fetchCommisionData } = require("../controllers/commisionController");
-const { createWalletData, fetchWalletData } = require("../controllers/walletController");
-const { createReviewData, fetchReviewData } = require("../controllers/reviewController");
-const { createPayoutData, fetchPayoutData } = require("../controllers/payoutController");
+const {
+  createTransportData,
+  fetchTransportData,
+} = require("../controllers/transportController");
+const {
+  createLocationData,
+  fetchLocationData,
+} = require("../controllers/locationController");
+const {
+  createCommisionData,
+  fetchCommisionData,
+} = require("../controllers/commisionController");
+const {
+  createWalletData,
+  fetchWalletData,
+} = require("../controllers/walletController");
+const {
+  createReviewData,
+  fetchReviewData,
+} = require("../controllers/reviewController");
+const {
+  createPayoutData,
+  fetchPayoutData,
+} = require("../controllers/payoutController");
 
 // -------------------- Customer Profile Route ----------------------------------------------------------------------------------
 
@@ -69,7 +91,7 @@ router.get("/message/:chatId", validateTokenMiddleware, allMessages);
 // ---------------------- Truck Routes -----------------------------------------------------------------------------------------------
 
 router.post("/create-truckData", validateTokenMiddleware, createTruckInfo);
-router.get( "/truckData", validateTokenMiddleware, fetchTruckInfo);
+router.get("/truckData", validateTokenMiddleware, fetchTruckInfo);
 router.put("/truckData/:truckId", validateTokenMiddleware, updateTruckInfo);
 router.delete("/truckData/:truckId", validateTokenMiddleware, deleteTruckInfo);
 
@@ -107,5 +129,34 @@ router.get("/review", validateTokenMiddleware, fetchReviewData);
 
 router.post("/create-payout", validateTokenMiddleware, createPayoutData);
 router.get("/payout", validateTokenMiddleware, fetchPayoutData);
+
+// --------------------------- Stripe webhoook ---------------------------------------------------------------------------------------------
+
+const endpointSecret =
+  "whsec_b5ab0dee18a755082f2fb0409b3a858a7b084ba62751e90c5d8e1c7e9ae3e8e5";
+
+router.post(
+  "/stripe/webhook",
+  express.raw({ type: "application/json" }),
+  (request, response) => {
+    const sig = request.headers["stripe-signature"];
+
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+      console.log("Webhook Verified!");
+    } catch (err) {
+      console.log(`Webhook Error: ${err.message}`);
+      response.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+
+    // Handle the event
+
+    // Return a 200 response to acknowledge receipt of the event
+    response.send().end();
+  }
+);
 
 module.exports = router;

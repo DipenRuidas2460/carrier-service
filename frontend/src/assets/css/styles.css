@@ -11827,11 +11827,49 @@ body {
 
 .truck-list-option{
   margin-top:1.25rem ;
+  padding: 1.25rem;
+  overflow: auto;
+  height: 250px;
 }
 
 .truck-list-option > h2{
   font-size: 22px;
   font-weight: bold;
+}
+
+.truck-list-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.25rem;
+}
+
+.truck-list-it{
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.truck-option{
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  align-items: center;
+  border-width: 1px;
+  width: 29%;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+  padding: 0.75rem;
+  background-color: #fff;
+  bottom: 1.25rem;
+  border-radius: 0.5rem;
+}
+
+.request-truck{
+  text-align: center;
+  border-radius: 0.5rem;
+  color: #fff;
+  background-color: #000;
+  padding: 0.75rem;
 }
 
 
@@ -11843,4 +11881,5 @@ body {
   .custom-parent{
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
 }

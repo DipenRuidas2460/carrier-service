@@ -4,8 +4,8 @@ import React from "react";
 function TruckListItem({ truck }) {
   return (
     <div >
-      <div className="d-flex">
-        <div>
+      <div className="truck-list-item">
+        <div className="truck-list-it">
           <Image src={truck.image} height={50} width={50} />
           <div>
             <h2 style={{ fontSize: "18px" }}>{truck.name}</h2>
