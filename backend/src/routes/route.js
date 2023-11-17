@@ -27,6 +27,7 @@ const { accessChat, fetchChats } = require("../controllers/chatController");
 const {
   createPaymentData,
   fetchPaymentData,
+  stripePaymentApi,
 } = require("../controllers/paymentController");
 
 const {
@@ -130,33 +131,12 @@ router.get("/review", validateTokenMiddleware, fetchReviewData);
 router.post("/create-payout", validateTokenMiddleware, createPayoutData);
 router.get("/payout", validateTokenMiddleware, fetchPayoutData);
 
-// --------------------------- Stripe webhoook ---------------------------------------------------------------------------------------------
-
-const endpointSecret =
-  "whsec_b5ab0dee18a755082f2fb0409b3a858a7b084ba62751e90c5d8e1c7e9ae3e8e5";
+// --------------------------- Stripe Payment Api -------------------------------------------------------------------------------------------
 
 router.post(
-  "/stripe/webhook",
-  express.raw({ type: "application/json" }),
-  (request, response) => {
-    const sig = request.headers["stripe-signature"];
-
-    let event;
-
-    try {
-      event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
-      console.log("Webhook Verified!");
-    } catch (err) {
-      console.log(`Webhook Error: ${err.message}`);
-      response.status(400).send(`Webhook Error: ${err.message}`);
-      return;
-    }
-
-    // Handle the event
-
-    // Return a 200 response to acknowledge receipt of the event
-    response.send().end();
-  }
+  "/api/create-checkout-session",
+  validateTokenMiddleware,
+  stripePaymentApi
 );
 
 module.exports = router;

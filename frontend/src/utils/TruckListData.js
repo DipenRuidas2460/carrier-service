@@ -5,6 +5,7 @@ export const TruckListData = [
     capacity: "120Ton",
     amount: 700,
     image: "/icv-truck.jpg",
+    quantity:1
   },
   {
     id: 2,
@@ -12,6 +13,7 @@ export const TruckListData = [
     capacity: "150Ton",
     amount: 900,
     image: "/tata-signa-5530-truck.png",
+    quantity:1
   },
   {
     id: 3,
@@ -19,6 +21,7 @@ export const TruckListData = [
     capacity: "160Ton",
     amount: 500,
     image: "/Pakistani_truck.jpg",
+    quantity:1
   },
   {
     id: 4,
@@ -26,6 +29,7 @@ export const TruckListData = [
     capacity: "100Ton",
     amount: 800,
     image: "/full_punjab.jpg",
+    quantity:1
   },
   {
     id: 5,
@@ -33,6 +37,7 @@ export const TruckListData = [
     capacity: "140Ton",
     amount: 1000,
     image: "/blazo-x-35.jpg",
+    quantity:1
   },
   {
     id: 6,
@@ -40,6 +45,7 @@ export const TruckListData = [
     capacity: "170Ton",
     amount: 1100,
     image: "/new_truck.jpg",
+    quantity:1
   },
   {
     id: 7,
@@ -47,5 +53,6 @@ export const TruckListData = [
     capacity: "155Ton",
     amount: 1200,
     image: "/Freightliner_truck.jpg",
+    quantity:1
   },
 ];

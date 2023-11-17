@@ -80,59 +80,40 @@ const fetchPaymentData = async function (req, res) {
   }
 };
 
-const stripeWebhook = async (req, res) => {
-  let data;
-  let eventType;
+const stripePaymentApi = async function (req, res) {
+  try {
+    const { item } = req.body;
 
-  // Check if webhook signing is configured.
-  let webhookSecret;
-  //webhookSecret = process.env.STRIPE_WEB_HOOK;
+    const newItem = [item];
 
-  if (webhookSecret) {
-    // Retrieve the event by verifying the signature using the raw body and secret.
-    let event;
-    let signature = req.headers["stripe-signature"];
+    const lineItems = newItem.map((el) => ({
+      price_data: {
+        currency: "inr",
+        product_data: {
+          name: el.name,
+        },
+        unit_amount: el.amount * 100,
+      },
+      quantity: el.quantity,
+    }));
 
-    try {
-      event = stripe.webhooks.constructEvent(
-        req.body,
-        signature,
-        webhookSecret
-      );
-    } catch (err) {
-      console.log(`⚠️  Webhook signature verification failed:  ${err}`);
-      return res.sendStatus(400);
-    }
-    // Extract the object from the event.
-    data = event.data.object;
-    eventType = event.type;
-  } else {
-    // Webhook signing is recommended, but if the secret is not configured in `config.js`,
-    // retrieve the event data directly from the request body.
-    data = req.body.data.object;
-    eventType = req.body.type;
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: lineItems,
+      mode: "payment",
+      success_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:3000/cancel",
+    });
+
+    return res.json({ id: session.id });
+  } catch (err) {
+    console.error(err);
+    return res.status(err.status || 500).send(err.message);
   }
-
-  // Handle the checkout.session.completed event
-  if (eventType === "checkout.session.completed") {
-    stripe.customers
-      .retrieve(data.customer)
-      .then(async (customer) => {
-        try {
-          // CREATE ORDER
-          createOrder(customer, data);
-        } catch (err) {
-          console.log(typeof createOrder);
-          console.log(err);
-        }
-      })
-      .catch((err) => console.log(err.message));
-  }
-
-  res.status(200).end();
 };
 
 module.exports = {
   createPaymentData,
   fetchPaymentData,
+  stripePaymentApi,
 };

@@ -12,6 +12,8 @@ import SuccessfulPasswordChangeMsg from "./components/modules/SuccessfulPassword
 import HomePage from "./pages/HomePage";
 import CustomerPage from "./components/layout/CustomerPage";
 import CarrierPage from "./components/layout/CarrierPage";
+import Success from "./components/miscellaneous/Success";
+import Cancel from "./components/miscellaneous/Cancel";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -58,6 +60,18 @@ function App() {
                 exact
                 path="/new-chats"
                 element={<ChatPage token={token} userInfo={userInfo} />}
+              />
+
+              <Route
+                exact
+                path="/success"
+                element={<Success token={token} />}
+              />
+
+              <Route
+                exact
+                path="/cancel"
+                element={<Cancel token={token} />}
               />
             </>
           )}
